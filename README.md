@@ -23,7 +23,7 @@ $ polymer test
 ```
 <custom-element-demo>
   <template>
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="address-autocomplete.html">
     <next-code-block></next-code-block>
   </template>
