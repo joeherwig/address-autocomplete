@@ -1,27 +1,11 @@
 # \<address-autocomplete\>
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/joeherwig/address-autocomplete)
 
 Webcomponent to fetch parts of an address within one single input-field that supports speech-input in webkit-browsers and offers an suggestion list based on open street map. The element object with the selected suggestion is then pushed to an external function to process these date eg. to fill in a form on the host site.
-
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
-
-## Viewing this webcomponent locally
-
-```
-$ polymer serve
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
 
 ## Demo:
 
 See the [online-Demo here](https://joeherwig.github.io/address-autocomplete/)
-
 
 ## Useage
 ```html
@@ -81,3 +65,21 @@ The following example is
 </html>
 
 ```
+
+## Local test
+### Install the Polymer-CLI
+
+First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
+
+### Viewing this webcomponent locally
+
+```
+$ polymer serve
+```
+
+### Running Tests
+
+```
+$ polymer test
+```
+
