@@ -21,36 +21,18 @@ $ polymer test
 ## demo:
 <!---
 ```
-<script>
-  function setAddress(address) {
-    document.getElementById('name').value = address.name || '';
-    document.getElementById('street').value = address.street || '';
-    document.getElementById('housenumber').value = address.housenumber || '';
-    document.getElementById('zipcode').value = address.postcode || '';
-    document.getElementById('city').value = address.city || '';
-    document.getElementById('country').value = address.country || '';
-  }
-</script>
 <custom-element-demo>
   <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="address-autocomplete.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
-```html
-<address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"/>
 
+```html
+<address-autocomplete>...</address-autocomplete>
 ```
-<address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"/>
-<form style="margin-top: 3rem;">
-  <input id="name" placeholder="Name"/>
-  <input id="street" placeholder="street"/>
-  <input id="housenumber" placeholder="housenumber"/>
-  <input id="zipcode" placeholder="zipcode"/>
-  <input id="city" placeholder="city"/>
-  <input id="country" placeholder="country"/>
-</form>
+
 
