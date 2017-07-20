@@ -18,21 +18,22 @@ $ polymer serve
 $ polymer test
 ```
 
-## demo:
-<!---
-```
-<custom-element-demo>
-  <template>
+## Demo:
+
+See the [online-Demo here](https://joeherwig.github.io/address-autocomplete/)
+
+
+## Useage
+```html
+  <head>
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="address-autocomplete.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
-
-```html
-<address-autocomplete>...</address-autocomplete>
+    ...
+  </head>
+  <body>
+    ...
+    <address-autocomplete></address-autocomplete>
+    ....
 ```
 
 ## Customizing
@@ -64,9 +65,9 @@ The following example is
   <body>
     <div>
       <h1>Simple address-autocomplete demo</h1>
-      
+
       <address-autocomplete processaddressfunction="myOwnAddressProcessingFunction" onfocus="myOwnAddressProcessingFunction({})"/>
-      
+
       <form style="margin-top: 3rem;">
         <input id="name" placeholder="Name"/>
         <input id="street" placeholder="street"/>
@@ -80,4 +81,3 @@ The following example is
 </html>
 
 ```
-
