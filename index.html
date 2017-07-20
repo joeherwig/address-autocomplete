@@ -1,16 +1,44 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0;url=demo/" />
-    <title>address-autocomplete</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>address-autocomplete demo</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="bower_components/iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="address-autocomplete.html">
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+    <script>
+      function setAddress(address) {
+        document.getElementById('name').value = address.name || '';
+        document.getElementById('street').value = address.street || '';
+        document.getElementById('housenumber').value = address.housenumber || '';
+        document.getElementById('zipcode').value = address.postcode || '';
+        document.getElementById('city').value = address.city || '';
+        document.getElementById('country').value = address.country || '';
+      }
+    </script>
   </head>
   <body>
-    <!--
-        ELEMENT API DOCUMENTATION SUPPORT COMING SOON
-        Visit demo/index.html to see live examples of your element running.
-        This page will automatically redirect you there when run in the browser
-        with `polymer serve`.
-      -->
+    <div class="vertical-section-container centered">
+      <h3>Basic address-autocomplete demo</h3>
+      <demo-snippet>
+        <template>
+          <address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"/>
+        </template>
+      </demo-snippet>
+      <form style="margin-top: 3rem;">
+        <input id="name" placeholder="Name"/>
+        <input id="street" placeholder="street"/>
+        <input id="housenumber" placeholder="housenumber"/>
+        <input id="zipcode" placeholder="zipcode"/>
+        <input id="city" placeholder="city"/>
+        <input id="country" placeholder="country"/>
+      </form>
+    </div>
   </body>
 </html>
