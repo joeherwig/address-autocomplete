@@ -4,18 +4,46 @@
   <template>
     <style>
       :host {
-        font-family: sans-serif;
-        margin-top: 3rem;
+        font-family: var(--searchBox-font-family, sans-serif);
+        font-size: var(--searchBox-font-size, 1rem);
         display: block;
         width: auto;
       };
+
+      #searchBox {
+        background: var(--searchBox-normal-bg-color, none);
+        border: var(--searchBox-normal-border, none);
+        border-bottom: var(--searchBox-normal-border-bottom, 1px solid silver);
+        border-radius: var(--searcBox-normal-border-radius, 0px);
+        display: inline-block;
+        height: 24px;
+        flex: 9 auto;
+        padding-left: 0.5rem;
+        transition: all 0.25s ease;
+      }
+
+      #searchBox.recording {
+        background: var(--searchBox-recording-bg-color, #ffd6d6);
+        border: var(--searchBox-recording-border, none);
+        border-bottom: var(--searchBox-recording-border-bottom, 1px solid red);
+        border-radius: var(--searcBox-recording-border-radius, 0px);
+        color: var(--searchBox-recording-color, black);
+        display: inline-block;
+        height: 24px;
+        flex: 20 auto;
+        padding-left: 0.5rem;
+        transition: all 0.25s ease;
+      }
+      #microphoneIcon{
+        fill: var(--searchBox-normal-microphoneIcon-fill, black);
+      }
+      #microphoneIcon.recording{
+        fill: var(--searchBox-recording-microphoneIcon-fill, red);
+      }
       #inputGroup {
         display: flex;
       }
-      #searchAddress {
-        border: none; border-bottom: 1px solid darkblue; width: auto; display: inline-block; height: 30px;
-        flex: 9 auto;
-      }
+
       .icon{
         display: none;
       }
@@ -24,7 +52,8 @@
       }
       #dictate {
         float: right;
-        width: 32px;
+        width: 24px;
+        max-width: 24px;
         display: none;
       }
       #recommendedaddresslist li{
@@ -33,9 +62,29 @@
       }
     </style>
     <div id="inputGroup">
-      <input id="searchAddress" onkeyup="getAddresses(this.value);" onchange="getAddresses(this.value);" placeholder="please enter Address">
+      <input id="searchBox" onkeyup="getAddresses(this.value);" onchange="getAddresses(this.value);" placeholder="please enter Address" onfocus="this.value = ''">
       <span id="dictate" onclick="startDictation();">
-        <img src="https://cdn4.iconfinder.com/data/icons/eldorado-devices/40/microphone-32.png">
+        <object>
+          <svg
+             xmlns:dc="http://purl.org/dc/elements/1.1/"
+             xmlns:cc="http://creativecommons.org/ns#"
+             xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:svg="http://www.w3.org/2000/svg"
+             xmlns="http://www.w3.org/2000/svg"
+             id="svg8"
+             version="1.1"
+             viewBox="0 0 26.458332 26.458333"
+             height="24"
+             width="24">
+            <g
+               transform="translate(-35.347978,-45.494643)"
+               id="layer1">
+              <path
+                 id="microphoneIcon"
+                 d="m 44.306745,71.247715 c 0.01316,-0.589519 0.04726,-0.700758 0.276324,-0.901888 0.234981,-0.206308 0.222049,-0.204799 1.752182,-0.204799 h 1.393848 v -1.864516 -1.864523 l 0.09154,0.02497 c 0.05031,0.01367 0.376105,0.0249 0.723924,0.0249 0.347812,0 0.673572,-0.01126 0.723917,-0.0249 l 0.09154,-0.02497 v 1.864523 1.864516 h 1.398277 c 1.355878,0 1.402833,0.0022 1.548601,0.07067 0.08268,0.03887 0.202668,0.131819 0.266656,0.206568 0.169312,0.197807 0.214685,0.390203 0.214685,0.910382 v 0.44329 h -4.246602 -4.246594 z m 3.555489,-5.504446 c -1.577526,-0.160357 -3.034776,-0.856472 -4.163164,-1.988688 -1.074388,-1.078029 -1.748437,-2.438455 -1.944661,-3.924868 -0.0382,-0.289523 -0.04964,-0.751444 -0.04964,-2.005706 0,-1.591632 0.0015,-1.633058 0.07067,-1.779881 0.242703,-0.516337 0.966597,-0.613553 1.337968,-0.179695 0.199345,0.232892 0.198342,0.22338 0.222577,2.111417 0.02192,1.706216 0.02341,1.735706 0.107404,2.080233 0.127568,0.523292 0.206064,0.739122 0.441854,1.214851 0.588686,1.187746 1.626815,2.116559 2.867723,2.565749 2.030922,0.735169 4.322829,0.14079 5.729177,-1.485787 0.632349,-0.731371 1.043436,-1.60084 1.205733,-2.550157 0.05872,-0.343428 0.06569,-0.546504 0.06666,-1.936368 7.43e-4,-1.418477 0.0066,-1.568006 0.06221,-1.729686 0.11772,-0.340826 0.394639,-0.536596 0.760837,-0.537882 0.352977,-0.0015 0.600406,0.160291 0.745461,0.486676 0.05678,0.127814 0.06132,0.256147 0.06132,1.748266 0,1.642743 -0.01435,1.903192 -0.138248,2.507247 -0.267049,1.30216 -1.024907,2.65372 -1.994187,3.556441 -1.486828,1.384721 -3.421233,2.047933 -5.389675,1.847838 z m -0.06235,-2.859532 c -0.808453,-0.161739 -1.459737,-0.498559 -2.036526,-1.053215 -0.621623,-0.597775 -1.005761,-1.308597 -1.186045,-2.194685 -0.05634,-0.276985 -0.06005,-0.605905 -0.06005,-5.28791 0,-5.468706 -0.01,-5.182051 0.202719,-5.834502 0.462916,-1.42012 1.66919,-2.470452 3.121325,-2.717814 2.193318,-0.373623 4.204182,1.016538 4.667775,3.226933 0.05998,0.285979 0.0628,0.527307 0.0628,5.325383 v 5.025841 l -0.0769,0.349476 c -0.365499,1.661157 -1.638586,2.890589 -3.291747,3.178879 -0.387878,0.06763 -1.014369,0.05946 -1.403346,-0.01835 z"/>
+            </g>
+          </svg>
+        </object>
       </span>
     </div>
     <div id="recommendedaddresslist"></div>
@@ -44,8 +93,9 @@
   <script>
   document._currentScript = document._currentScript || document.currentScript;
   let recommendedaddresslist = {};
-  let searchAddress = {};
+  let searchBox = {};
   let selectedAddress = {};
+  let microphoneIcon = {};
   let processFuntion = "";
 
   function createAddressList(search) {
@@ -84,7 +134,8 @@
       },
       ready: function() {
         recommendedaddresslist = this.$.recommendedaddresslist;
-        searchAddress = this.$.searchAddress;
+        searchBox = this.$.searchBox;
+        microphoneIcon = this.$.microphoneIcon;
         processFuntion = this.processaddressfunction || 'setAddress';
         if (window.hasOwnProperty('webkitSpeechRecognition')) {
           this.$.dictate.style = 'display: inline-block';
@@ -98,35 +149,36 @@
     }
 
     function getAddresses(searchstring) {
+      searchBox.classList.remove('recording');
+      microphoneIcon.classList.remove('recording');
       if (searchstring.length > 3 ) {
         let myaddress = createAddressList(searchstring).then(function(myaddress) {
           recommendedaddresslist.innerHTML = myaddress;
         })
         let listitems = Polymer.dom(recommendedaddresslist).querySelectorAll('li');
-        listitems.forEach(function(item) {
-          //console.log(item);
-        })
       }
     }
 
     function startDictation() {
       if (window.hasOwnProperty('webkitSpeechRecognition')) {
-        searchAddress.style = "background: rgb(255, 170, 170);";
+        searchBox.classList.add('recording');
+        microphoneIcon.classList.add('recording');
         var recognition = new webkitSpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = "de-DE";
         recognition.start();
         recognition.onresult = function(e) {
-          searchAddress.value = e.results[0][0].transcript;
+          searchBox.value = e.results[0][0].transcript;
           recognition.stop();
-          searchAddress.style = "background: none;";
-          getAddresses(searchAddress.value);
-          //document.getElementById('labnol').submit();
+          searchBox.classList.remove('recording');
+          microphoneIcon.classList.remove('recording');
+          getAddresses(searchBox.value);
         };
         recognition.onerror = function(e) {
           recognition.stop();
-          searchAddress.style = "background: none;";
+          searchBox.classList.remove('recording');
+          microphoneIcon.classList.remove('recording');
         }
       }
     }

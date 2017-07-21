@@ -10,35 +10,101 @@
     <link rel="import" href="../address-autocomplete.html">
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
+      h2 {
+        margin-top: 3rem;
+      }
+      .themeBlueSharp div, .themeBlueSharp form {
+        padding: none;
+        margin: none;
+        border: none;
+      }
+      .themeBlueSharp input,.themeBlueSharp input:focus {
+        margin-bottom: 0.25rem;
+        border: none;
+        background: lightblue;
+        padding: 0.2rem;
+        color: black;
+        border-radius: 15px;
+      }
+      .themeBlueSharp input:not([value=""]) {
+          border: none;
+          border-bottom: 1px dotted rgba(192, 192, 192, 0.45);
+      }
+      .themeBlueSharp input[value=""] {
+          border-bottom: 1px solid darkblue;
+      }
+      .themeBlueSharp .line * {
+          flex: 1;
+      }
+      .themeBlueSharp form .line {
+          display: flex;
+      }
+      .themeBlueSharp address-autocomplete {
+        --searchBox-normal-bg-color: lightblue;
+        --searchBox-recording-bg-color:  rgb(0, 0, 214);
+        --searchBox-recording-color: white;
+        --searcBox-normal-border-radius: 15px;
+        --searcBox-recording-border-radius: 15px;
+        --searchBox-normal-microphoneIcon-fill: lightblue;
+        --searchBox-recording-microphoneIcon-fill: rgb(0, 0, 214);
+
+      }
       </style>
     </custom-style>
     <script>
+      function setAddressSimple(address) {
+        document.getElementById('simplename').value = address.name || '';
+        document.getElementById('simplestreet').value = address.street || '';
+        document.getElementById('simplehousenumber').value = address.housenumber || '';
+        document.getElementById('simplezipcode').value = address.postcode || '';
+        document.getElementById('simplezipcode').text = address.postcode || '';
+        document.getElementById('simplecity').value = address.city || '';
+        document.getElementById('simplecountry').value = address.country || '';
+      }
+
       function setAddress(address) {
         document.getElementById('name').value = address.name || '';
         document.getElementById('street').value = address.street || '';
         document.getElementById('housenumber').value = address.housenumber || '';
         document.getElementById('zipcode').value = address.postcode || '';
+        document.getElementById('zipcode').text = address.postcode || '';
         document.getElementById('city').value = address.city || '';
         document.getElementById('country').value = address.country || '';
+        console.log(address);
       }
     </script>
   </head>
   <body>
     <div class="vertical-section-container centered">
-      <h3>Basic address-autocomplete demo</h3>
+      <h1>Basic address-autocomplete demo</h1>
       <demo-snippet>
         <template>
-          <address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"></address-autocomplete>
+          <address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"/></address-autocomplete>
         </template>
       </demo-snippet>
-      <form style="margin-top: 3rem;">
-        <input id="name" placeholder="Name"/>
-        <input id="street" placeholder="street"/>
-        <input id="housenumber" placeholder="housenumber"/>
-        <input id="zipcode" placeholder="zipcode"/>
-        <input id="city" placeholder="city"/>
-        <input id="country" placeholder="country"/>
-      </form>
+      <!-- -->
+      <h2>unstyled:</h2>
+      <div class="themeSimple">
+        <address-autocomplete class="myStyle" processaddressfunction="setAddressSimple" onfocus="setAddressSimple({})"/></address-autocomplete>
+        <form style="margin-top: 1rem;">
+          <div class="line"><input id="simplename" placeholder="Name"/></div>
+          <div class="line"><input id="simplestreet" placeholder="street"/><input id="simplehousenumber" placeholder="housenumber"/></div>
+          <div class="line"><input id="simplezipcode" placeholder="zipcode"/><input id="simplecity" placeholder="city"/></div>
+          <div class="line"><input id="simplecountry" placeholder="country"/></div>
+        </form>
+      </div>
+      <!-- -->
+      <div class="themeBlueSharp">
+        <h2>custom styled:</h2>
+        <address-autocomplete class="myStyle" processaddressfunction="setAddress" onfocus="setAddress({})"/></address-autocomplete>
+        <form style="margin-top: 1rem;">
+          <div class="line"><input id="name" placeholder="Name"/></div>
+          <div class="line"><input id="street" placeholder="street"/><input id="housenumber" placeholder="housenumber"/></div>
+          <div class="line"><input id="zipcode" placeholder="zipcode"/><input id="city" placeholder="city"/></div>
+          <div class="line"><input id="country" placeholder="country"/></div>
+        </form>
+      </div>
+
     </div>
   </body>
 </html>
