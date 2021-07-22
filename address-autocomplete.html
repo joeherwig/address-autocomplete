@@ -100,7 +100,7 @@
 
   function createAddressList(search) {
     return new Promise(function(resolve, reject) {
-      fetch('https://photon.komoot.de/api/?q='+ search)
+      fetch('https://photon.komoot.io/api/?q='+ search)
         .then(function(response) {
           return response.json();
         })
