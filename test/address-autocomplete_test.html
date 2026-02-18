@@ -8,8 +8,8 @@
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-
-    <link rel="import" href="../address-autocomplete.html">
+    <!-- load the rewritten component as a self-contained JS module -->
+    <script src="../address-autocomplete.js"></script>
   </head>
   <body>
 
@@ -28,21 +28,20 @@
     <script>
       suite('address-autocomplete', function() {
 
-        test('instantiating the element with default properties works', function() {
+        test('element definition and basic functionality', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'address-autocomplete');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello address-autocomplete!');
+          assert.ok(element instanceof HTMLElement);
+          assert.ok(element.shadowRoot, 'shadow root was created');
+          // search box is present inside shadow DOM
+          var input = element.shadowRoot.querySelector('#searchBox');
+          assert.ok(input, 'input field exists');
         });
 
-        test('setting a property on the element works', function() {
-          // Create a test fixture
-          var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        test('processaddressfunction defaults to setAddress', function() {
+          var element = fixture('BasicTestFixture');
+          // attribute should be absent
+          assert.isNull(element.getAttribute('processaddressfunction'));
+          assert.equal(element.processFunction, 'setAddress');
         });
 
       });

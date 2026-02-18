@@ -1,7 +1,7 @@
-<link rel="import" href="bower_components/polymer/polymer.html">
+(function() {
+  const template = document.createElement('template');
 
-<dom-module id="address-autocomplete">
-  <template>
+  template.innerHTML = `
     <style>
       :host {
         font-family: var(--searchBox-font-family, sans-serif);
@@ -62,8 +62,8 @@
       }
     </style>
     <div id="inputGroup">
-      <input id="searchBox" onkeyup="getAddresses(this.value);" onchange="getAddresses(this.value);" placeholder="please enter Address" onfocus="this.value = ''">
-      <span id="dictate" onclick="startDictation();">
+      <input id="searchBox" placeholder="please enter Address">
+      <span id="dictate">
         <object>
           <svg
              xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -88,99 +88,103 @@
       </span>
     </div>
     <div id="recommendedaddresslist"></div>
-  </template>
+  `;
 
-  <script>
-  document._currentScript = document._currentScript || document.currentScript;
-  let recommendedaddresslist = {};
-  let searchBox = {};
-  let selectedAddress = {};
-  let microphoneIcon = {};
-  let processFuntion = "";
-
-  function createAddressList(search) {
-    return new Promise(function(resolve, reject) {
-      fetch('https://photon.komoot.io/api/?q='+ search)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(j) {
-          addressList = "";
-          addressList += '<ul>'
-          Object.keys(j.features).forEach(function(item){
-            // addressList += '<li conclick="returnAddress(' + j.features[item].properties + ')">'
-            addressList += '<li id="'+j.features[item].properties.osm_id+'" onclick="returnSelectedAddress(\'' + encodeURIComponent(JSON.stringify(j.features[item].properties)) + '\')">'
-            addressList += (j.features[item].properties.name == undefined || j.features[item].properties.name === j.features[item].properties.street || j.features[item].properties.street == undefined) ? '' : '<b>' + j.features[item].properties.name + ' </b>'
-            addressList += (j.features[item].properties.name == undefined || j.features[item].properties.name === j.features[item].properties.street) ? '' : '' + j.features[item].properties.name + ' '
-            // addressList += (j.features[item].properties.country == undefined) ? '' : ' '+ j.features[item].properties.country
-            // addressList += (j.features[item].properties.state == undefined) ? '' : ' '+ j.features[item].properties.state
-            addressList += (j.features[item].properties.postcode == undefined) ? '' : ' '+ j.features[item].properties.postcode
-            addressList += (j.features[item].properties.city == undefined) ? '' : ' '+ j.features[item].properties.city
-            addressList += (j.features[item].properties.street == undefined) ? '' : ' ' + j.features[item].properties.street
-            addressList += (j.features[item].properties.housenumber == undefined) ? ' ' : ' ' + j.features[item].properties.housenumber
-            // addressList += '' + j.features[item].properties.osm_value
-            addressList += '</li>'
-          });
-          addressList += '</ul>'
-          resolve(addressList);
-        });
-      });
-  };
-
-    Polymer({
-      is: 'address-autocomplete',
-      properties: {
-        processaddressfunction: String
-      },
-      ready: function() {
-        recommendedaddresslist = this.$.recommendedaddresslist;
-        searchBox = this.$.searchBox;
-        microphoneIcon = this.$.microphoneIcon;
-        processFuntion = this.processaddressfunction || 'setAddress';
-        if (window.hasOwnProperty('webkitSpeechRecognition')) {
-          this.$.dictate.style = 'display: inline-block';
-        };
-      }
-    })
-
-    function returnSelectedAddress(selectedAddress) {
-      recommendedaddresslist.innerHTML = '';
-      window[processFuntion](JSON.parse(decodeURIComponent(selectedAddress)));
+  class AddressAutocomplete extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
-    function getAddresses(searchstring) {
-      searchBox.classList.remove('recording');
-      microphoneIcon.classList.remove('recording');
-      if (searchstring.length > 3 ) {
-        let myaddress = createAddressList(searchstring).then(function(myaddress) {
-          recommendedaddresslist.innerHTML = myaddress;
-        })
-        let listitems = Polymer.dom(recommendedaddresslist).querySelectorAll('li');
-      }
-    }
+    connectedCallback() {
+      this.recommendedaddresslist = this.shadowRoot.querySelector('#recommendedaddresslist');
+      this.searchBox = this.shadowRoot.querySelector('#searchBox');
+      this.microphoneIcon = this.shadowRoot.querySelector('#microphoneIcon');
+      this.dictate = this.shadowRoot.querySelector('#dictate');
 
-    function startDictation() {
+      this.searchBox.addEventListener('keyup', e => this.getAddresses(e.target.value));
+      this.searchBox.addEventListener('change', e => this.getAddresses(e.target.value));
+      this.searchBox.addEventListener('focus', e => { e.target.value = ''; });
+      this.dictate.addEventListener('click', () => this.startDictation());
+
       if (window.hasOwnProperty('webkitSpeechRecognition')) {
-        searchBox.classList.add('recording');
-        microphoneIcon.classList.add('recording');
-        var recognition = new webkitSpeechRecognition();
+        this.dictate.style.display = 'inline-block';
+      }
+    }
+
+    get processFunction() {
+      return this.getAttribute('processaddressfunction') || 'setAddress';
+    }
+
+    async fetchAddresses(search) {
+      const response = await fetch('https://photon.komoot.io/api/?q=' + encodeURIComponent(search));
+      const j = await response.json();
+      const ul = document.createElement('ul');
+      j.features.forEach(f => {
+        const props = f.properties;
+        const li = document.createElement('li');
+        li.id = props.osm_id;
+        li.innerHTML = this._formatAddress(props);
+        li.addEventListener('click', () => this.returnSelectedAddress(props));
+        ul.appendChild(li);
+      });
+      return ul;
+    }
+
+    _formatAddress(props) {
+      let addressList = '';
+      addressList += (props.name == undefined || props.name === props.street || props.street == undefined) ? '' : '<b>' + props.name + ' </b>';
+      addressList += (props.name == undefined || props.name === props.street) ? '' : '' + props.name + ' ';
+      addressList += (props.postcode == undefined) ? '' : ' ' + props.postcode;
+      addressList += (props.city == undefined) ? '' : ' ' + props.city;
+      addressList += (props.street == undefined) ? '' : ' ' + props.street;
+      addressList += (props.housenumber == undefined) ? ' ' : ' ' + props.housenumber;
+      return addressList;
+    }
+
+    returnSelectedAddress(props) {
+      this.recommendedaddresslist.innerHTML = '';
+      const fn = window[this.processFunction];
+      if (typeof fn === 'function') {
+        fn(props);
+      }
+    }
+
+    async getAddresses(searchString) {
+      this.searchBox.classList.remove('recording');
+      this.microphoneIcon.classList.remove('recording');
+      if (searchString.length > 3) {
+        const list = await this.fetchAddresses(searchString);
+        this.recommendedaddresslist.innerHTML = '';
+        this.recommendedaddresslist.appendChild(list);
+      }
+    }
+
+    startDictation() {
+      if (window.hasOwnProperty('webkitSpeechRecognition')) {
+        this.searchBox.classList.add('recording');
+        this.microphoneIcon.classList.add('recording');
+        const recognition = new webkitSpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = "de-DE";
         recognition.start();
-        recognition.onresult = function(e) {
-          searchBox.value = e.results[0][0].transcript;
+        recognition.onresult = e => {
+          this.searchBox.value = e.results[0][0].transcript;
           recognition.stop();
-          searchBox.classList.remove('recording');
-          microphoneIcon.classList.remove('recording');
-          getAddresses(searchBox.value);
+          this.searchBox.classList.remove('recording');
+          this.microphoneIcon.classList.remove('recording');
+          this.getAddresses(this.searchBox.value);
         };
-        recognition.onerror = function(e) {
+        recognition.onerror = e => {
           recognition.stop();
-          searchBox.classList.remove('recording');
-          microphoneIcon.classList.remove('recording');
-        }
+          this.searchBox.classList.remove('recording');
+          this.microphoneIcon.classList.remove('recording');
+        };
       }
     }
-    </script>
-</dom-module>
+  }
+
+  customElements.define('address-autocomplete', AddressAutocomplete);
+})();
