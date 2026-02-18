@@ -4,10 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>address-autocomplete demo</title>
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../address-autocomplete.html">
+    <script src="../address-autocomplete.js"></script>
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
       h2 {
@@ -79,13 +76,13 @@
       <h1>Basic address-autocomplete demo</h1>
       <demo-snippet>
         <template>
-          <address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"/></address-autocomplete>
+          <address-autocomplete processaddressfunction="setAddress" onfocus="setAddress({})"></address-autocomplete>
         </template>
       </demo-snippet>
       <!-- -->
       <h2>unstyled:</h2>
       <div class="themeSimple">
-        <address-autocomplete class="myStyle" processaddressfunction="setAddressSimple" onfocus="setAddressSimple({})"/></address-autocomplete>
+        <address-autocomplete class="myStyle" processaddressfunction="setAddressSimple" onfocus="setAddressSimple({})"></address-autocomplete>
         <form style="margin-top: 1rem;">
           <div class="line"><input id="simplename" placeholder="Name"/></div>
           <div class="line"><input id="simplestreet" placeholder="street"/><input id="simplehousenumber" placeholder="housenumber"/></div>
@@ -96,7 +93,7 @@
       <!-- -->
       <div class="themeBlueSharp">
         <h2>custom styled:</h2>
-        <address-autocomplete class="myStyle" processaddressfunction="setAddress" onfocus="setAddress({})"/></address-autocomplete>
+        <address-autocomplete class="myStyle" processaddressfunction="setAddress" onfocus="setAddress({})"></address-autocomplete>
         <form style="margin-top: 1rem;">
           <div class="line"><input id="name" placeholder="Name"/></div>
           <div class="line"><input id="street" placeholder="street"/><input id="housenumber" placeholder="housenumber"/></div>

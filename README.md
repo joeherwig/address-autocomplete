@@ -10,14 +10,10 @@ See the [online-Demo here](https://joeherwig.github.io/address-autocomplete/)
 ## Useage
 ```html
   <head>
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="address-autocomplete.html">
-    ...
+    <script src="address-autocomplete.js"></script>
   </head>
   <body>
-    ...
     <address-autocomplete></address-autocomplete>
-    ....
 ```
 
 ## Customizing
@@ -33,8 +29,7 @@ The following example is
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>address-autocomplete demo</title>
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="address-autocomplete.html">
+    <script src="../address-autocomplete.js"></script>
     <script>
       function myOwnAddressProcessingFunction(address) {
         document.getElementById('name').value = address.name || '';
@@ -67,19 +62,6 @@ The following example is
 ```
 
 ## Local test
-### Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
-
 ### Viewing this webcomponent locally
 
-```
-$ polymer serve
-```
-
-### Running Tests
-
-```
-$ polymer test
-```
-
+You can serve the demo with a simple HTTP server, e.g. using `python -m http.server` or any static file server. The element no longer depends on Polymer or Bower.
